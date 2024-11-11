@@ -1,6 +1,6 @@
 === WooCommerce Weight Based Shipping ===
 Contributors: dangoodman
-Tags: woocommerce, weight-based shipping, table rate shipping
+Tags: woocommerce shipping, weight-based shipping, table rate shipping
 Requires PHP: 7.2
 Requires at least: 4.6
 Tested up to: 6.6
@@ -54,6 +54,9 @@ See <a href="https://wordpress.org/plugins/weight-based-shipping-for-woocommerce
 
 
 == Changelog ==
+
+= 6.0.0 =
+* Make the new UI the default. No breaking changes.
 
 = 5.11.0 =
 * Fix order subtotal might be incorrectly detected for block-based Cart.
