@@ -3,9 +3,9 @@ Contributors: dangoodman
 Tags: woocommerce shipping, weight-based shipping, table rate shipping
 Requires PHP: 7.2
 Requires at least: 4.6
-Tested up to: 6.6
+Tested up to: 6.7
 WC requires at least: 5.0
-WC tested up to: 9.3
+WC tested up to: 9.4
 
 
 Simple yet flexible weight-based shipping for WooCommerce
@@ -54,6 +54,11 @@ See <a href="https://wordpress.org/plugins/weight-based-shipping-for-woocommerce
 
 
 == Changelog ==
+
+= 6.1.0 =
+* Rename the column Amount to Value.
+* Add a note regarding multiple matching shipping rules.
+* Tested with WordPress 6.7, WooCommerce 9.4.
 
 = 6.0.0 =
 * Make the new UI the default. No breaking changes.
