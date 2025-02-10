@@ -39,9 +39,6 @@ Like the plugin? Leave a [review](https://wordpress.org/support/plugin/weight-ba
 
 == Changelog ==
 
-= 6.4.0 =
-* Use the new global method by default for new installations.
-
 = 6.3.1 =
 * Tested with WooCommerce 9.6.
 
