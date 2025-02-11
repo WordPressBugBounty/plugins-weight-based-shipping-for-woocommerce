@@ -35,7 +35,7 @@ class ShippingMethod extends WC_Shipping_Method
         $this->init_settings();
 
         if (!$this->instance_id) {
-            $disabled = (get_option('wbs_global_methods') ?: 'only-wbs') === 'only-wbsng' && class_exists(\Gzp\WbsNg\Plugin::class);
+            $disabled = Plugin::globalMethods() === 'only-wbsng';
             if ($disabled) {
                 $this->enabled = 'no';
             }
@@ -181,6 +181,8 @@ class ShippingMethod extends WC_Shipping_Method
 
         $currencyPlacement = explode('_', get_option('woocommerce_currency_pos'));
 
+        /** @noinspection PhpUndefinedClassInspection */
+        /** @noinspection PhpUndefinedNamespaceInspection */
         wp_localize_script('wbs-app', 'wbs_js_data', [
 
             'locations' => self::getAllLocations(),
@@ -206,7 +208,7 @@ class ShippingMethod extends WC_Shipping_Method
             'wcpre441' => !Plugin::wc441plus(),
 
             'globalMethods' => ($this->instance_id || !class_exists(\Gzp\WbsNg\Plugin::class)) ? null : [
-                'state' => get_option('wbs_global_methods') ?: 'only-wbs',
+                'state' => Plugin::globalMethods(),
                 'endpoint' => Api::$globalSwitch->url(),
                 'wbsngRedirectUrl' => Plugin::shippingUrl(\Gzp\WbsNg\Plugin::ID),
             ],
