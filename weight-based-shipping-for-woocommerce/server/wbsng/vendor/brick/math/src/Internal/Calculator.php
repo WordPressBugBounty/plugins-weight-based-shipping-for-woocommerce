@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace GzpWbsNgVendors\Brick\Math\Internal;
+namespace WbsngVendors\Brick\Math\Internal;
 
-use GzpWbsNgVendors\Brick\Math\Exception\RoundingNecessaryException;
-use GzpWbsNgVendors\Brick\Math\RoundingMode;
+use WbsngVendors\Brick\Math\Exception\RoundingNecessaryException;
+use WbsngVendors\Brick\Math\RoundingMode;
 
 /**
  * Performs basic operations on arbitrary size integers.
@@ -501,7 +501,7 @@ abstract class Calculator
         $hasDiscardedFraction = ($remainder !== '0');
         $isPositiveOrZero = ($a[0] === '-') === ($b[0] === '-');
 
-        $discardedFractionSign = function() use ($remainder, $b) : int {
+        $discardedFractionSign = function() use($remainder, $b) : int {
             $r = $this->abs($this->mul($remainder, '2'));
             $b = $this->abs($b);
 

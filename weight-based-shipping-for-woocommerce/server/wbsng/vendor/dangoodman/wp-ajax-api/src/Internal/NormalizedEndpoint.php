@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace GzpWbsNgVendors\Dgm\WpAjaxApi\Internal;
+namespace WbsngVendors\Dgm\WpAjaxApi\Internal;
 
-use GzpWbsNgVendors\Dgm\WpAjaxApi\Endpoint;
-use GzpWbsNgVendors\Dgm\WpAjaxApi\Request;
-use GzpWbsNgVendors\Dgm\WpAjaxApi\Response;
+use WbsngVendors\Dgm\WpAjaxApi\Endpoint;
+use WbsngVendors\Dgm\WpAjaxApi\Request;
+use WbsngVendors\Dgm\WpAjaxApi\Response;
 
 
 /**
@@ -28,14 +28,14 @@ class NormalizedEndpoint extends Endpoint
 
     public function get(Request $request): Response
     {
-        return $this->handleExceptions(function() use ($request) {
+        return $this->handleExceptions(function() use($request) {
             return $this->endpoint->get($request);
         });
     }
 
     public function post(Request $request): Response
     {
-        return $this->handleExceptions(function() use ($request) {
+        return $this->handleExceptions(function() use($request) {
             return $this->endpoint->post($request);
         });
     }

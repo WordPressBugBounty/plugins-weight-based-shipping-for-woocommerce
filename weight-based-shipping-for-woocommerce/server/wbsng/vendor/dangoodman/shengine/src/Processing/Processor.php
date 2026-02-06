@@ -1,12 +1,12 @@
 <?php
-namespace GzpWbsNgVendors\Dgm\Shengine\Processing;
+namespace WbsngVendors\Dgm\Shengine\Processing;
 
-use GzpWbsNgVendors\Dgm\Arrays\Arrays;
-use GzpWbsNgVendors\Dgm\Shengine\Interfaces\IPackage;
-use GzpWbsNgVendors\Dgm\Shengine\Interfaces\IProcessor;
-use GzpWbsNgVendors\Dgm\Shengine\Interfaces\IRate;
+use WbsngVendors\Dgm\Arrays\Arrays;
+use WbsngVendors\Dgm\Shengine\Interfaces\IPackage;
+use WbsngVendors\Dgm\Shengine\Interfaces\IProcessor;
+use WbsngVendors\Dgm\Shengine\Interfaces\IRate;
 use Dgm\Shengine\Interfaces\IRule;
-use GzpWbsNgVendors\Dgm\Shengine\Model\Rate;
+use WbsngVendors\Dgm\Shengine\Model\Rate;
 
 
 class Processor implements IProcessor
@@ -50,7 +50,7 @@ class Processor implements IProcessor
             return $rates;
         }
 
-        return Arrays::map($rates, function (IRate $rate) use ($title, $taxable) {
+        return Arrays::map($rates, function (IRate $rate) use($title, $taxable) {
 
             if ($title !== null && $rate->getTitle() === null) {
                 $rate = new Rate($rate->getCost(), $title, $rate->isTaxable());
