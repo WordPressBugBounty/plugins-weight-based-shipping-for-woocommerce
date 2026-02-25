@@ -39,6 +39,10 @@ Like the plugin? Leave a [review](https://wordpress.org/support/plugin/weight-ba
 
 == Changelog ==
 
+= 6.15.0 =
+* Fix deprecation warnings from PHP 8.3, 8.4.
+* PRO: Support Require mod. All required rules must be matched for a shipping method to be activated.
+
 = 6.14.0 =
 * More flexible configuration loading for better compatibility with third-party code.
 * Tested with WooCommerce 10.5.
@@ -211,7 +215,7 @@ Like the plugin? Leave a [review](https://wordpress.org/support/plugin/weight-ba
 * Tested with WooCommerce 7.4.
 
 = 5.4.0 =
-* Use the cart price provided by WooCommerce by default for fresh installations of the plugin. It makes Order Subtotal accounting for virtual items' prices and increases compatibility with third-party plugins.
+* Use the cart price provided by WooCommerce by default for fresh installations of the plugin. It makes Order Subtotal to account for virtual items' prices and increases compatibility with third-party plugins.
 * Make sure a user has manage_woocommerce capability to update the shipping rules.
 * Tested with PHP 8.2.
 
