@@ -39,6 +39,9 @@ Like the plugin? Leave a [review](https://wordpress.org/support/plugin/weight-ba
 
 == Changelog ==
 
+= 6.15.3 =
+* Hide woocommerce ads on the settings page.
+
 = 6.15.2 =
 * Tested with WooCommerce 10.7.
 
