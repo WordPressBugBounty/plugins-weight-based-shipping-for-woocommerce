@@ -6,7 +6,7 @@ Requires at least: 5.8
 Tested up to: 7.1
 WC requires at least: 7.0
 WC tested up to: 11.1
-Stable tag: 6.17.0
+Stable tag: 6.18.0
 
 
 Weight Based Shipping is a flexible and widely-used solution to calculate shipping costs based on the total cart weight and value.
@@ -39,6 +39,9 @@ Like the plugin? Leave a [review](https://wordpress.org/support/plugin/weight-ba
 
 
 == Changelog ==
+
+= 6.18.0 =
+* Fix Local Pickup or other global shipping methods are not available on checkout when the global WBS method is enabled.
 
 = 6.17.0 =
 * PRO: Restore updates check.

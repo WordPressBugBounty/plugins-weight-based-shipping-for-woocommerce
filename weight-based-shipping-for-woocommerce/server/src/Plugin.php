@@ -7,6 +7,7 @@ use Wbs\Migrations\ConfigStorage;
 use WbsVendors\Dgm\PluginServices\ServiceInstaller;
 use WbsVendors\Dgm\Shengine\Migrations\MigrationService;
 use WbsVendors\Dgm\Shengine\Migrations\Storage\WordpressOptions;
+use WbsVendors\Dgm\WcTools\WcTools;
 use WC_Cache_Helper;
 
 
@@ -58,8 +59,6 @@ class Plugin
     {
         $v = get_option('wbs_global_methods') ?: 'only-wbsng';
 
-        /** @noinspection PhpUndefinedClassInspection */
-        /** @noinspection PhpUndefinedNamespaceInspection */
         if (($v === 'only-wbsng' || $v === 'both') && !class_exists(\Aikinomi\Wbsng\Plugin::class)) {
             $v = 'only-wbs';
         }
@@ -94,7 +93,7 @@ class Plugin
             }
         });
 
-        $this->fixIncorrectHidingOfShippingSectionWhenNoShippingZoneMethodsDefined();
+        WcTools::countGlobalMethods([self::ID, 'wbsng']);
     }
 
 
@@ -181,46 +180,5 @@ class Plugin
             $this->meta->paths->root.'/migrations',
             new ConfigStorage('wbs\\_%config', $options)
         );
-    }
-
-    private function fixIncorrectHidingOfShippingSectionWhenNoShippingZoneMethodsDefined(): void
-    {
-        add_action('woocommerce_init', function() {
-
-            /** @noinspection PhpUnusedLocalVariableInspection */
-            $transient = $field = null;
-            $wcver = WC()->version;
-            if (version_compare($wcver, '9.7.0') >= 0) {
-                $transient = 'transient_wc_shipping_method_count';
-                $field = 'legacy';
-            }
-            else if (version_compare($wcver, '3.6.0') >= 0) {
-                $transient = 'transient_wc_shipping_method_count_legacy';
-                $field = 'value';
-            }
-            else {
-                return;
-            }
-
-            add_filter($transient, function($value) use ($field) {
-                static $running = false;
-
-                if ($running) return $value;
-                $running = true;
-                try {
-                    $trv = WC_Cache_Helper::get_transient_version('shipping');
-                    if ($value === null || (int)($value[$field] ?? null) === 0 || ($value['version'] ?? null) !== $trv) {
-                        if ($value === false) $value = [];
-                        $value[$field] = max(1, wc_get_shipping_method_count(true));
-                        $value['version'] = $trv;
-                    }
-                }
-                finally {
-                    $running = false;
-                }
-
-                return $value;
-            }, PHP_INT_MAX);
-        }, 0);
     }
 }
