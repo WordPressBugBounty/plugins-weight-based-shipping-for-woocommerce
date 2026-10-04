@@ -15,19 +15,20 @@ use WbsngVendors\Dgm\Shengine\Model\Price;
 use WbsngVendors\Dgm\Shengine\Woocommerce\Model\Item\WoocommerceItem;
 use WbsngVendors\Dgm\Shengine\Woocommerce\Model\Item\WpmlAwareItem;
 use InvalidArgumentException;
-use SebastianBergmann\ObjectReflector\TestFixture\ChildClass;
 use WC_Cart;
 use WC_Product;
 use WC_Product_Variation;
 
 
+/** @noinspection PhpUnused */
 class PackageConverter
 {
     /**
      * @param IPackage $package
      * @return array
+     * @noinspection PhpUnused
      */
-    public static function fromCoreToWoocommerce(IPackage $package)
+    public static function fromCoreToWoocommerce(IPackage $package): array
     {
         $wcpkg = array();
         $wcpkg['contents'] = self::makeWcItems($package);
@@ -44,8 +45,9 @@ class PackageConverter
      *                            non-shippable (virtual or others) items as well. Set to null to cancel that behavior.
      * @return IPackage
      * @deprecated {@see fromWoocommerceToCore2}
+     * @noinspection PhpUnused
      */
-    public static function fromWoocommerceToCore(array $_package, WC_Cart $cart = null)
+    public static function fromWoocommerceToCore(array $_package, WC_Cart $cart = null): IPackage
     {
         return self::fromWoocommerceToCore2($_package, $cart, false, isset($cart));
     }
@@ -58,11 +60,11 @@ class PackageConverter
      * @return IPackage
      */
     public static function fromWoocommerceToCore2(
-        array $_package,
+        array   $_package,
         WC_Cart $cart = null,
-        $preferCustomPackagePriceOverPerItemPrices = false,
-        $includeVirtualItemsIfPackageIsRoot = false
-    ) {
+        bool    $preferCustomPackagePriceOverPerItemPrices = false,
+        bool    $includeVirtualItemsIfPackageIsRoot = false
+    ): IPackage {
         if (($preferCustomPackagePriceOverPerItemPrices || $includeVirtualItemsIfPackageIsRoot) && !isset($cart)) {
             throw new InvalidArgumentException('$cart is required for extended options, null given');
         }
@@ -75,10 +77,11 @@ class PackageConverter
                 remove_filter($fltr, $fltrcb, $fltpr);
             });
 
-            $globalPackages = $cart->get_shipping_packages();
+            $globalPackages = self::getShippingPackages($cart);
 
             unset($deferred);
 
+            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
             $_package = reset($globalPackages);
             $skipNonShippableItems = false;
         }
@@ -151,10 +154,17 @@ class PackageConverter
         $destination = null;
         if (($dest = @$_package['destination']) && @$dest['country']) {
 
+            $postcode = $dest['postcode'] ?? null;
+            if ($postcode !== null) {
+                // WC calls wc_format_postcode on checkout, but the ajax checkout update does not.
+                // This makes space-less UK postcodes work differently on ajax updates, e.g. '1AA11A' vs '1AA 11A'.
+                $postcode = wc_format_postcode($postcode, $dest['country']);
+            }
+
             $destination = new Destination(
                 $dest['country'],
                 @$dest['state'],
-                @$dest['postcode'],
+                $postcode,
                 @$dest['city'],
                 new Address(@$dest['address'], @$dest['address_2'])
             );
@@ -183,16 +193,44 @@ class PackageConverter
         return new Package($items, $destination, $customer, $coupons, $customPackagePrice);
     }
 
-    private static function isGlobalPackage($_package, WC_Cart $cart)
+    private static function isGlobalPackage($_package, WC_Cart $cart): bool
     {
-        $globalPackages = $cart->get_shipping_packages();
+        $globalPackages = self::getShippingPackages($cart);
+        if (!isset($globalPackages)) {
+            return false;
+        }
+
         return count($globalPackages) === 1 && self::comparePackages(reset($globalPackages), $_package);
     }
 
-    /** @noinspection IfReturnReturnSimplificationInspection */
-    private static function comparePackages(array $package1, array $package2)
+    /**
+     * Some woocommerce_cart_shipping_packages filters calculate shipping rates, e.g., Local Pickup Plus.
+     * With a shipping method calling us, it would be an infinite recursion.
+     *
+     * @return array|null Null if called from within a woocommerce_cart_shipping_packages filter run by us.
+     */
+    private static function getShippingPackages(WC_Cart $cart)
     {
-        unset($package1['rates'], $package2['rates']);
+        if (self::$gettingShippingPackages) {
+            return null;
+        }
+
+        self::$gettingShippingPackages = true;
+        try {
+            return $cart->get_shipping_packages();
+        } finally {
+            self::$gettingShippingPackages = false;
+        }
+    }
+
+    /** @noinspection IfReturnReturnSimplificationInspection */
+    private static function comparePackages(array $package1, array $package2): bool
+    {
+        foreach (['rates', 'package_id', 'package_name'] as $key) {
+            unset($package1[$key], $package2[$key]);
+        }
+
+        // fast path
         if ($package1 === $package2) {
             return true;
         }
@@ -206,7 +244,7 @@ class PackageConverter
         return false;
     }
 
-    private static function makeWcItems(IPackage $package)
+    private static function makeWcItems(IPackage $package): array
     {
         $wcItems = array();
 
@@ -363,6 +401,7 @@ class PackageConverter
      */
     private static function isConvertibleToInt($value)
     {
+        /** @noinspection TypeUnsafeComparisonInspection */
         return is_numeric($value) && (int)$value == (float)$value;
     }
 
@@ -372,14 +411,21 @@ class PackageConverter
      */
     private static function supportsFractionalQuantity(WC_Product $product)
     {
+        $fractional = static function($v) {
+            return !($v === '' || $v === null || $v === false || self::isConvertibleToInt($v));
+        };
+
         return
-            !self::isConvertibleToInt(apply_filters('woocommerce_quantity_input_max', 0, $product)) ||
-            !self::isConvertibleToInt(apply_filters('woocommerce_quantity_input_max', -1, $product)) ||
-            !self::isConvertibleToInt(apply_filters('woocommerce_quantity_input_step', 1, $product));
+            $fractional(apply_filters('woocommerce_quantity_input_min', 0, $product)) ||
+            $fractional(apply_filters('woocommerce_quantity_input_max', -1, $product)) ||
+            $fractional(apply_filters('woocommerce_quantity_input_step', 1, $product));
     }
 
     private static function error($message)
     {
         trigger_error($message, E_USER_ERROR);
     }
+
+    /** @var bool */
+    private static $gettingShippingPackages = false;
 }

@@ -2,8 +2,9 @@
 /**
  * Plugin Name: Weight Based Shipping for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/weight-based-shipping-for-woocommerce/
- * Description: Simple yet flexible shipping method for WooCommerce.
- * Version: 6.18.0
+ * Description: Simple yet flexible shipping by country, weight, and subtotal for WooCommerce.
+ * License: GPLv2 or later
+ * Version: 6.19.0
  * Author: weightbasedshipping.com
  * Author URI: https://weightbasedshipping.com
  * Requires PHP: 7.3

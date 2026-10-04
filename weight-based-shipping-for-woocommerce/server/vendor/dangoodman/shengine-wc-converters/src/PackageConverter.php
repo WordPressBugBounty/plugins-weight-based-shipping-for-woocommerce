@@ -77,7 +77,7 @@ class PackageConverter
                 remove_filter($fltr, $fltrcb, $fltpr);
             });
 
-            $globalPackages = $cart->get_shipping_packages();
+            $globalPackages = self::getShippingPackages($cart);
 
             unset($deferred);
 
@@ -195,8 +195,32 @@ class PackageConverter
 
     private static function isGlobalPackage($_package, WC_Cart $cart): bool
     {
-        $globalPackages = $cart->get_shipping_packages();
+        $globalPackages = self::getShippingPackages($cart);
+        if (!isset($globalPackages)) {
+            return false;
+        }
+
         return count($globalPackages) === 1 && self::comparePackages(reset($globalPackages), $_package);
+    }
+
+    /**
+     * Some woocommerce_cart_shipping_packages filters calculate shipping rates, e.g., Local Pickup Plus.
+     * With a shipping method calling us, it would be an infinite recursion.
+     *
+     * @return array|null Null if called from within a woocommerce_cart_shipping_packages filter run by us.
+     */
+    private static function getShippingPackages(WC_Cart $cart)
+    {
+        if (self::$gettingShippingPackages) {
+            return null;
+        }
+
+        self::$gettingShippingPackages = true;
+        try {
+            return $cart->get_shipping_packages();
+        } finally {
+            self::$gettingShippingPackages = false;
+        }
     }
 
     /** @noinspection IfReturnReturnSimplificationInspection */
@@ -401,4 +425,7 @@ class PackageConverter
     {
         trigger_error($message, E_USER_ERROR);
     }
+
+    /** @var bool */
+    private static $gettingShippingPackages = false;
 }
