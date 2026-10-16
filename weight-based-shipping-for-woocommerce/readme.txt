@@ -6,8 +6,8 @@ Requires PHP: 7.3
 Requires at least: 5.8
 Tested up to: 7.1
 WC requires at least: 7.0
-WC tested up to: 11.1
-Stable tag: 6.19.0
+WC tested up to: 11.2
+Stable tag: 6.20.0
 
 
 Table rate shipping by weight for WooCommerce: weight brackets, shipping per lb or kg, free shipping over an amount, rates by country or order total.
@@ -118,7 +118,7 @@ Bound the paid rules so their value range stops at the threshold. Past that poin
 
 = How do I set different shipping rates for different countries? =
 
-Name the country or state in the Destination column of each rule, and leave a catch-all for everywhere else. [Rates by country](https://weightbasedshipping.com/recipe/shipping-rates-by-country) shows a domestic and international table.
+Name the country or state in the Destination column of each rule, and leave a catch-all for everywhere else. [Rates by country](https://weightbasedshipping.com/recipe/shipping-rates-by-country) shows a domestic and an international table.
 
 = Can I charge per item or by quantity? =
 
@@ -186,6 +186,10 @@ Product-aware rules, the Mod column (Stop, Drop, Deny, Require), several rule ta
 
 
 == Changelog ==
+
+= 6.20.0 =
+* Split-shipping breakdown: show in the cart and checkout blocks as well; add visibility settings; format in multiple lines for better readability.
+* Tested with WooCommerce 11.2.
 
 = 6.19.0 =
 * Fix order subtotal might be incorrectly detected for block-based Cart.

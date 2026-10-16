@@ -56,7 +56,7 @@ class Solution implements Equality
         }
 
         $this->price = $price;
-        $this->title = join(' + ', $titles);
+        $this->title = join(' & ', $titles);
     }
 
     protected function _equals(self $to): bool

@@ -10,10 +10,14 @@ use Aikinomi\Wbsng\Mapping\T;
 class Settings
 {
     public $disableSplitShipping;
+    public $breakdownInCart;
+    public $breakdownAtCheckout;
 
-    public function __construct(bool $disableSplitShipping = false)
+    public function __construct(bool $disableSplitShipping = false, bool $breakdownInCart = true, bool $breakdownAtCheckout = true)
     {
         $this->disableSplitShipping = $disableSplitShipping;
+        $this->breakdownInCart = $breakdownInCart;
+        $this->breakdownAtCheckout = $breakdownAtCheckout;
     }
 
     public static function unserialize(?array $data): self
@@ -27,6 +31,8 @@ class Settings
         $data = Context::of($data);
 
         $self->disableSplitShipping = $data['disableSplitShipping']->map([T::class, 'bool']);
+        $self->breakdownInCart = $data['breakdownInCart']->map([T::class, 'optionalBool'], $self->breakdownInCart);
+        $self->breakdownAtCheckout = $data['breakdownAtCheckout']->map([T::class, 'optionalBool'], $self->breakdownAtCheckout);
 
         return $self;
     }

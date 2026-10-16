@@ -14,7 +14,7 @@
 
 <?php if (!$solution) return; ?>
 
-                <div class="wbsng-shipments wbsng-shipments--brief">
+                <div class="wbsng-shipments">
 <?php foreach ($solution->shipments as $shipment): ?>
                     <div class="wbsng-shipment">
                         <div class="wbsng-shipment-header">
@@ -25,13 +25,11 @@
                             <ul class="wbsng-shipment-products">
     <?php
     /** @var \Aikinomi\Wbsng\Model\Order\Item $item */
-    foreach ($shipment->bundle as $i => $item):
-        $last = $i === $shipment->bundle->count() - 1;
+    foreach ($shipment->bundle as $item):
     ?>
                                 <li class="wbsng-shipment-product"><!--
                                     --><span class="wbsng-shipment-product-name"><?= esc_html($item->name) ?></span><!--
-                                    --><span class="wbsng-shipment-product-quantity"><?= esc_html((string)$item->quantity) ?></span><!--
-                                    --><?php if (!$last): ?><span class="wbsng-shipment-product-delim">, </span><?php endif; ?>
+                                    --><span class="wbsng-shipment-product-quantity"><?= esc_html((string)$item->quantity) ?></span>
                                 </li>
     <?php endforeach; ?>
                             </ul>
