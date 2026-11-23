@@ -7,7 +7,7 @@ use WbsngVendors\Dgm\Shengine\Processing\RateRegister;
 
 class SumAggregator extends ReduceAggregator
 {
-    protected function reduce(IRate $carry = null, IRate $current)
+    protected function reduce(?IRate $carry, IRate $current)
     {
         if (!isset($carry)) {
             $carry = new RateRegister();

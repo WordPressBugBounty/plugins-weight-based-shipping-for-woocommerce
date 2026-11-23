@@ -25,16 +25,6 @@ class SolutionMeta
         try {
 
             $data = $ctx->map(function($x) {
-
-                // php pre 7.3
-                if (!defined('JSON_THROW_ON_ERROR')) {
-                    $r = json_decode($x, true);
-                    if (json_last_error() !== JSON_ERROR_NONE) {
-                        throw new \RuntimeException(json_last_error_msg(), json_last_error());
-                    }
-                    return $r;
-                }
-
                 return json_decode($x, true, 512, JSON_THROW_ON_ERROR);
             });
 

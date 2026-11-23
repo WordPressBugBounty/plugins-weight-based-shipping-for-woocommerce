@@ -2,12 +2,12 @@
 Contributors: dangoodman
 Tags: woocommerce shipping, table rate shipping, woocommerce free shipping, weight-based shipping, advanced shipping
 License: GPLv2 or later
-Requires PHP: 7.3
+Requires PHP: 7.4
 Requires at least: 5.8
 Tested up to: 7.1
 WC requires at least: 7.0
-WC tested up to: 11.2
-Stable tag: 6.20.0
+WC tested up to: 11.3
+Stable tag: 6.21.0
 
 
 Table rate shipping by weight for WooCommerce: weight brackets, shipping per lb or kg, free shipping over an amount, rates by country or order total.
@@ -186,6 +186,11 @@ Product-aware rules, the Mod column (Stop, Drop, Deny, Require), several rule ta
 
 
 == Changelog ==
+
+= 6.21.0 =
+* Drop PHP 7.3 support.
+* Fix PHP 8.4 deprecation warnings "Implicitly marking a parameter as nullable is deprecated".
+* Tested with WooCommerce 11.3.
 
 = 6.20.0 =
 * Split-shipping breakdown: show in the cart and checkout blocks as well; add visibility settings; format in multiple lines for better readability.

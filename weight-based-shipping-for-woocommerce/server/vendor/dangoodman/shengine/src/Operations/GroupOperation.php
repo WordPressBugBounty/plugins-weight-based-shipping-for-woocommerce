@@ -1,10 +1,10 @@
 <?php
 namespace WbsVendors\Dgm\Shengine\Operations;
 
-use Exception;
 use Dgm\Shengine\Interfaces\IOperation;
 use Dgm\Shengine\Interfaces\IPackage;
 use Dgm\Shengine\Processing\Registers;
+use Exception;
 
 
 class GroupOperation extends \WbsVendors\Dgm\Shengine\Operations\AbstractOperation

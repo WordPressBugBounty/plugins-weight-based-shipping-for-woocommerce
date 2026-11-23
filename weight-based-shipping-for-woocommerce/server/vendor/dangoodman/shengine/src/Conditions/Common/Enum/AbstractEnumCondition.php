@@ -1,9 +1,9 @@
 <?php
 namespace WbsVendors\Dgm\Shengine\Conditions\Common\Enum;
 
-use InvalidArgumentException;
 use Dgm\ClassNameAware\ClassNameAware;
 use Dgm\Shengine\Interfaces\ICondition;
+use InvalidArgumentException;
 
 
 abstract class AbstractEnumCondition extends \WbsVendors\Dgm\ClassNameAware\ClassNameAware implements \WbsVendors\Dgm\Shengine\Interfaces\ICondition

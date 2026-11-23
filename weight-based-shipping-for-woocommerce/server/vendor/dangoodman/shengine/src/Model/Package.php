@@ -13,10 +13,10 @@ class Package implements \WbsVendors\Dgm\Shengine\Interfaces\IPackage
 {
     public function __construct(
         array $items = array(),
-        \WbsVendors\Dgm\Shengine\Model\Destination $destination = null,
-        \WbsVendors\Dgm\Shengine\Model\Customer $customer = null,
+        ?\WbsVendors\Dgm\Shengine\Model\Destination $destination = null,
+        ?\WbsVendors\Dgm\Shengine\Model\Customer $customer = null,
         array $coupons = array(),
-        \WbsVendors\Dgm\Shengine\Model\Price $price = null
+        ?\WbsVendors\Dgm\Shengine\Model\Price $price = null
     ) {
         $this->items = $items;
         $this->destination = $destination;
@@ -30,7 +30,7 @@ class Package implements \WbsVendors\Dgm\Shengine\Interfaces\IPackage
      * @param Price|null $price
      * @return self
      */
-    public function inherit(array $items, \WbsVendors\Dgm\Shengine\Model\Price $price = null)
+    public function inherit(array $items, ?\WbsVendors\Dgm\Shengine\Model\Price $price = null)
     {
         return new self($items, $this->getDestination(), $this->getCustomer(), $this->getCoupons(), $price);
     }

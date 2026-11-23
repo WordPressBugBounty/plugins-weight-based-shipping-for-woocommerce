@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace WbsVendors\Dgm\Shengine\Woocommerce\Converters;
 
 use Dgm\Arrays\Arrays;
@@ -13,7 +13,7 @@ class RateConverter
      * @param WC_Shipping_Rate[] $_rates
      * @return IRate[]
      */
-    public static function fromWoocommerceToCore(array $_rates)
+    public static function fromWoocommerceToCore(array $_rates): array
     {
         return \WbsVendors\Dgm\Arrays\Arrays::map($_rates, function(WC_Shipping_Rate $_rate) {
             return new \WbsVendors\Dgm\Shengine\Model\Rate($_rate->get_cost(), $_rate->get_label(), null, $_rate->get_meta_data());
@@ -22,16 +22,18 @@ class RateConverter
 
     /**
      * @param IRate[] $rates
-     * @param string $defaultTitle
-     * @param string|null $idPrefix
      * @param bool $zeroNegatives  If true negative costs will be replaced with zero.
      * @return array  Woocommerce rates to add with WC_Shipping_Method::add_rate()
      */
-    static public function fromCoreToWoocommerce(array $rates, $defaultTitle, $idPrefix = null, $zeroNegatives = false)
-    {
-        $_rates = array();
+    public static function fromCoreToWoocommerce(
+        array   $rates,
+        string  $defaultTitle,
+        ?string $idPrefix = null,
+        bool    $zeroNegatives = false
+    ): array {
+        $_rates = [];
 
-        $wcRateIdsCounters = array();
+        $wcRateIdsCounters = [];
 
         foreach ($rates as $rate) {
 
@@ -40,7 +42,7 @@ class RateConverter
                 $title = $defaultTitle;
             }
 
-            $idParts = array();
+            $idParts = [];
 
             $hash = substr(md5($title), 0, 8);
             $idParts[] = $hash;
@@ -55,8 +57,8 @@ class RateConverter
 
             $id = join('_', $idParts);
 
-            isset($wcRateIdsCounters[$id]) ? $wcRateIdsCounters[$id]++ : ($wcRateIdsCounters[$id]=0);
-            if (($count = $wcRateIdsCounters[$id]) > 0) {
+            $count = $wcRateIdsCounters[$id] = ($wcRateIdsCounters[$id] ?? -1) + 1;
+            if ($count > 0) {
                 $id .= '_'.($count+1);
             }
 
@@ -69,13 +71,13 @@ class RateConverter
                 $cost = 0;
             }
 
-            $_rates[] = array(
+            $_rates[] = [
                 'id' => $id,
                 'label' => $title,
                 'cost' => $cost,
                 'taxes' => $rate->isTaxable() === false ? false : null,
                 'meta_data' => $rate->getMeta(),
-            );
+            ];
         }
 
         return $_rates;

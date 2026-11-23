@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace WbsVendors\Dgm\Shengine\Woocommerce\Converters;
 
 use Deferred\Deferred;
@@ -23,14 +23,10 @@ use WC_Product_Variation;
 /** @noinspection PhpUnused */
 class PackageConverter
 {
-    /**
-     * @param IPackage $package
-     * @return array
-     * @noinspection PhpUnused
-     */
+    /** @noinspection PhpUnused */
     public static function fromCoreToWoocommerce(\WbsVendors\Dgm\Shengine\Interfaces\IPackage $package): array
     {
-        $wcpkg = array();
+        $wcpkg = [];
         $wcpkg['contents'] = self::makeWcItems($package);
         $wcpkg['contents_cost'] = self::calcContentsCostField($wcpkg['contents']);
         $wcpkg['applied_coupons'] = $package->getCoupons();
@@ -40,30 +36,14 @@ class PackageConverter
     }
 
     /**
-     * @param array $_package
-     * @param WC_Cart|null $cart  If passed and $_package is the entire order, the returned package will contain
-     *                            non-shippable (virtual or others) items as well. Set to null to cancel that behavior.
-     * @return IPackage
-     * @deprecated {@see fromWoocommerceToCore2}
-     * @noinspection PhpUnused
-     */
-    public static function fromWoocommerceToCore(array $_package, WC_Cart $cart = null): \WbsVendors\Dgm\Shengine\Interfaces\IPackage
-    {
-        return self::fromWoocommerceToCore2($_package, $cart, false, isset($cart));
-    }
-
-    /**
-     * @param array $_package
-     * @param WC_Cart $cart
      * @param bool $preferCustomPackagePriceOverPerItemPrices Requires $cart to be set
      * @param bool $includeVirtualItemsIfPackageIsRoot Requires $cart to be set
-     * @return IPackage
      */
-    public static function fromWoocommerceToCore2(
-        array   $_package,
-        WC_Cart $cart = null,
-        bool    $preferCustomPackagePriceOverPerItemPrices = false,
-        bool    $includeVirtualItemsIfPackageIsRoot = false
+    public static function fromWoocommerceToCore(
+        array    $_package,
+        ?WC_Cart $cart = null,
+        bool     $preferCustomPackagePriceOverPerItemPrices = false,
+        bool     $includeVirtualItemsIfPackageIsRoot = false
     ): \WbsVendors\Dgm\Shengine\Interfaces\IPackage {
         if (($preferCustomPackagePriceOverPerItemPrices || $includeVirtualItemsIfPackageIsRoot) && !isset($cart)) {
             throw new InvalidArgumentException('$cart is required for extended options, null given');
@@ -86,9 +66,9 @@ class PackageConverter
             $skipNonShippableItems = false;
         }
 
-        $items = array();
+        $items = [];
 
-        foreach ((array)@$_package['contents'] as $_item) {
+        foreach ($_package['contents'] ?? [] as $_item) {
 
             /** @var WC_Product $product */
             $product = $_item['data'];
@@ -130,9 +110,9 @@ class PackageConverter
                 ($_item['line_subtotal_tax'] - $_item['line_tax']) / $quantity
             );
 
-            $variationAttributes = array();
-            foreach ((@$_item['variation'] ?: array()) as $attr => $value) {
-                if (substr_compare($attr, 'attribute_', 0, 10) === 0) {
+            $variationAttributes = [];
+            foreach ($_item['variation'] ?? [] as $attr => $value) {
+                if (substr_compare((string)$attr, 'attribute_', 0, 10) === 0) {
                     $variationAttributes[substr($attr, 10)] = $value;
                 }
             }
@@ -152,7 +132,7 @@ class PackageConverter
         }
 
         $destination = null;
-        if (($dest = @$_package['destination']) && @$dest['country']) {
+        if (($dest = $_package['destination'] ?? null) && !empty($dest['country'])) {
 
             $postcode = $dest['postcode'] ?? null;
             if ($postcode !== null) {
@@ -163,10 +143,10 @@ class PackageConverter
 
             $destination = new \WbsVendors\Dgm\Shengine\Model\Destination(
                 $dest['country'],
-                @$dest['state'],
+                $dest['state'] ?? null,
                 $postcode,
-                @$dest['city'],
-                new \WbsVendors\Dgm\Shengine\Model\Address(@$dest['address'], @$dest['address_2'])
+                $dest['city'] ?? null,
+                new \WbsVendors\Dgm\Shengine\Model\Address($dest['address'] ?? null, $dest['address_2'] ?? null)
             );
         }
 
@@ -175,7 +155,7 @@ class PackageConverter
             $customer = new \WbsVendors\Dgm\Shengine\Model\Customer($_package['user']['ID']);
         }
 
-        $coupons = array();
+        $coupons = [];
         if (!empty($_package['applied_coupons'])) {
             $coupons = array_map('strtolower', $_package['applied_coupons']);
         }
@@ -193,7 +173,7 @@ class PackageConverter
         return new \WbsVendors\Dgm\Shengine\Model\Package($items, $destination, $customer, $coupons, $customPackagePrice);
     }
 
-    private static function isGlobalPackage($_package, WC_Cart $cart): bool
+    private static function isGlobalPackage(array $_package, WC_Cart $cart): bool
     {
         $globalPackages = self::getShippingPackages($cart);
         if (!isset($globalPackages)) {
@@ -209,7 +189,7 @@ class PackageConverter
      *
      * @return array|null Null if called from within a woocommerce_cart_shipping_packages filter run by us.
      */
-    private static function getShippingPackages(WC_Cart $cart)
+    private static function getShippingPackages(WC_Cart $cart): ?array
     {
         if (self::$gettingShippingPackages) {
             return null;
@@ -246,7 +226,7 @@ class PackageConverter
 
     private static function makeWcItems(\WbsVendors\Dgm\Shengine\Interfaces\IPackage $package): array
     {
-        $wcItems = array();
+        $wcItems = [];
 
         $lineGrouping = new \WbsVendors\Dgm\Shengine\Grouping\AttributeGrouping(new \WbsVendors\Dgm\Shengine\Attributes\ProductVariationAttribute());
         $lines = $package->split($lineGrouping);
@@ -279,7 +259,7 @@ class PackageConverter
                 }
             }
 
-            $wcItem = array(); {
+            $wcItem = []; {
 
                 $wcItem['data'] = $product;
                 $wcItem['data_hash'] = wc_get_cart_item_data_hash($product);
@@ -311,7 +291,7 @@ class PackageConverter
         return $wcItems;
     }
 
-    private static function calcContentsCostField($wcItems)
+    private static function calcContentsCostField(array $wcItems)
     {
         $value = 0;
 
@@ -337,13 +317,13 @@ class PackageConverter
         return null;
     }
 
-    private static function getDestination(\WbsVendors\Dgm\Shengine\Interfaces\IPackage $package)
+    private static function getDestination(\WbsVendors\Dgm\Shengine\Interfaces\IPackage $package): ?array
     {
         if ($destination = $package->getDestination()) {
 
             $address = $destination->getAddress();
 
-            return array_map('strval', array(
+            return array_map('strval', [
                 'country' => $destination->getCountry(),
                 'state' => $destination->getState(),
                 'postcode' => $destination->getPostalCode(),
@@ -351,13 +331,13 @@ class PackageConverter
                 'address' => $address ? $address->getLine1() : null,
                 'address_1' => $address ? $address->getLine1() : null,
                 'address_2' => $address ? $address->getLine2() : null,
-            ));
+            ]);
         }
 
         return null;
     }
 
-    private static function getDimensions(WC_Product $product)
+    private static function getDimensions(WC_Product $product): \WbsVendors\Dgm\Shengine\Model\Dimensions
     {
         return new \WbsVendors\Dgm\Shengine\Model\Dimensions(
             (float)self::getProductAttr($product, 'length'),
@@ -366,23 +346,19 @@ class PackageConverter
         );
     }
 
-    private static function getProductAttr(WC_Product $product, $attr)
+    private static function getProductAttr(WC_Product $product, string $attr)
     {
-        if (version_compare(WC()->version, '3.0', '>=')) {
-            switch ((string)$attr) {
+        switch ($attr) {
 
-                case 'id':
-                    return $product->is_type('variation') ? $product->get_parent_id() : $product->get_id();
+            case 'id':
+                return $product->is_type('variation') ? $product->get_parent_id() : $product->get_id();
 
-                case 'variation_id':
-                    return $product->is_type('variation') ? $product->get_id() : null;
+            case 'variation_id':
+                return $product->is_type('variation') ? $product->get_id() : null;
 
-                default:
-                    return call_user_func(array((\WbsVendors_CCR::klass($product)), "get_{$attr}"));
-            }
+            default:
+                return $product->{"get_{$attr}"}();
         }
-
-        return $product->{$attr};
     }
 
     /**
@@ -397,19 +373,14 @@ class PackageConverter
      * isConvertibleToInt(1e10) => fale
      *
      * @param mixed $value
-     * @return bool
      */
-    private static function isConvertibleToInt($value)
+    private static function isConvertibleToInt($value): bool
     {
         /** @noinspection TypeUnsafeComparisonInspection */
         return is_numeric($value) && (int)$value == (float)$value;
     }
 
-    /**
-     * @param WC_Product $product
-     * @return bool
-     */
-    private static function supportsFractionalQuantity(WC_Product $product)
+    private static function supportsFractionalQuantity(WC_Product $product): bool
     {
         $fractional = static function($v) {
             return !($v === '' || $v === null || $v === false || self::isConvertibleToInt($v));
@@ -421,7 +392,7 @@ class PackageConverter
             $fractional(apply_filters('woocommerce_quantity_input_step', 1, $product));
     }
 
-    private static function error($message)
+    private static function error(string $message): void
     {
         trigger_error($message, E_USER_ERROR);
     }

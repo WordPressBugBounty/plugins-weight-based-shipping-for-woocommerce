@@ -13,10 +13,10 @@ class Package implements IPackage
 {
     public function __construct(
         array $items = array(),
-        Destination $destination = null,
-        Customer $customer = null,
+        ?Destination $destination = null,
+        ?Customer $customer = null,
         array $coupons = array(),
-        Price $price = null
+        ?Price $price = null
     ) {
         $this->items = $items;
         $this->destination = $destination;
@@ -30,7 +30,7 @@ class Package implements IPackage
      * @param Price|null $price
      * @return self
      */
-    public function inherit(array $items, Price $price = null)
+    public function inherit(array $items, ?Price $price = null)
     {
         return new self($items, $this->getDestination(), $this->getCustomer(), $this->getCoupons(), $price);
     }

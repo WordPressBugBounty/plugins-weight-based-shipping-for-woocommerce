@@ -143,7 +143,7 @@ class ShippingMethod extends WC_Shipping_Method
                 return;
             }
 
-            [$items, $dest] = Convert::convert(PackageConverter::fromWoocommerceToCore2($_package, WC()->cart, true));
+            [$items, $dest] = Convert::convert(PackageConverter::fromWoocommerceToCore($_package, WC()->cart, true));
 
             $solutions = Shipping::solutions($items, $dest, $config);
 

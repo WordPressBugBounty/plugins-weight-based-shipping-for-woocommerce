@@ -5,7 +5,6 @@ namespace WbsngVendors\Dgm\Shengine\Aggregators;
 use WbsngVendors\Dgm\ClassNameAware\ClassNameAware;
 use WbsngVendors\Dgm\Shengine\Interfaces\IAggregator;
 use WbsngVendors\Dgm\Shengine\Interfaces\IRate;
-use Dgm\Shengine\Model\Rate;
 use WbsngVendors\Dgm\Shengine\Processing\RateRegister;
 
 
@@ -27,7 +26,7 @@ abstract class ReduceAggregator extends ClassNameAware implements IAggregator
      * @param IRate $current
      * @return IRate
      */
-    protected abstract function reduce(IRate $carry = null, IRate $current);
+    protected abstract function reduce(?IRate $carry, IRate $current);
 
     private function _reduce(array $rates)
     {

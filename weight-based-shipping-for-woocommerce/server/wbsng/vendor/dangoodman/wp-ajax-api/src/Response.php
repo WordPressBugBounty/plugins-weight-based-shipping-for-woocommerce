@@ -49,7 +49,7 @@ class Response
         return new Response($code, 'application/json', $body);
     }
 
-    private function __construct(int $code, string $contentType = null, string $body = '')
+    private function __construct(int $code, ?string $contentType = null, string $body = '')
     {
         $this->code = $code;
         $this->contentType = $contentType;

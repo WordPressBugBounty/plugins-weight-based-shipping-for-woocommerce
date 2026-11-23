@@ -1,8 +1,8 @@
 <?php
 namespace WbsVendors\Dgm\Shengine;
 
-use Dgm\SimpleProperties\SimpleProperties;
 use Dgm\Shengine\Interfaces\IGrouping;
+use Dgm\SimpleProperties\SimpleProperties;
 
 
 /**

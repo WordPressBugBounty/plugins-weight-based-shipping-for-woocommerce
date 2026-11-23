@@ -4,7 +4,6 @@ namespace WbsngVendors\Dgm\Shengine\Grouping;
 use WbsngVendors\Dgm\Shengine\Interfaces\IAttribute;
 use WbsngVendors\Dgm\Shengine\Interfaces\IGrouping;
 use WbsngVendors\Dgm\Shengine\Interfaces\IItem;
-use Dgm\Shengine\Interfaces\IPackage;
 use WbsngVendors\Dgm\Shengine\Model\Package;
 
 
@@ -36,7 +35,6 @@ class AttributeGrouping implements IGrouping
                 $ids = array_merge($ids, self::ids($item, false));
             }
         } else if (is_object($value)) {
-            /** @noinspection PhpParamsInspection */
             $ids[] = spl_object_hash($value);
         } else {
             $ids[] = (string)$value;

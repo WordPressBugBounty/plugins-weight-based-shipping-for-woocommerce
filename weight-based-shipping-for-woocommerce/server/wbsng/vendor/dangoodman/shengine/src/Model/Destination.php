@@ -6,7 +6,7 @@ use InvalidArgumentException;
 
 class Destination
 {
-    public function __construct($country, $state = null, $postalCode = null, $city = null, Address $address = null)
+    public function __construct($country, $state = null, $postalCode = null, $city = null, ?Address $address = null)
     {
         $country = (string)$country;
         if ($country === '') {

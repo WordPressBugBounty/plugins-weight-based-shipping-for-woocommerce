@@ -10,10 +10,10 @@ class Item implements IItem
     public function __construct(
         $productId = null,
         $productVariationId = null,
-        Price $price = null,
+        ?Price $price = null,
         $weight = null,
-        Dimensions $dimensions = null,
-        array $terms = null
+        ?Dimensions $dimensions = null,
+        ?array $terms = null
     ) {
         /** @noinspection PhpDeprecationInspection
          * Public setters are deprecated. We'll make them private some day and remove the deprecated state.
@@ -131,7 +131,7 @@ class Item implements IItem
      * @param array|null $terms
      * @return $this
      */
-    public function setTerms($taxonomy, array $terms = null)
+    public function setTerms($taxonomy, ?array $terms = null)
     {
         if (is_array($taxonomy) && func_num_args() === 1) {
             /** @noinspection CallableParameterUseCaseInTypeContextInspection */

@@ -1,12 +1,12 @@
 <?php
 namespace WbsngVendors\Dgm\Shengine\Calculators;
 
-use InvalidArgumentException;
 use WbsngVendors\Dgm\NumberUnit\NumberUnit;
 use WbsngVendors\Dgm\Shengine\Interfaces\IAttribute;
 use WbsngVendors\Dgm\Shengine\Interfaces\ICalculator;
 use WbsngVendors\Dgm\Shengine\Interfaces\IPackage;
 use WbsngVendors\Dgm\Shengine\Model\Rate;
+use InvalidArgumentException;
 
 
 class ProgressiveCalculator implements ICalculator

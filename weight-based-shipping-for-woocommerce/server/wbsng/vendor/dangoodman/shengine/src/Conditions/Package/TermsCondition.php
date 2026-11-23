@@ -4,7 +4,6 @@ namespace WbsngVendors\Dgm\Shengine\Conditions\Package;
 use WbsngVendors\Dgm\Shengine\Grouping\ByItemGrouping;
 use WbsngVendors\Dgm\Shengine\Interfaces\ICondition;
 use WbsngVendors\Dgm\Shengine\Interfaces\IPackage;
-use Dgm\Shengine\Model\Package;
 use InvalidArgumentException;
 
 
@@ -15,7 +14,7 @@ class TermsCondition extends AbstractPackageCondition
     const SEARCH_NO = 'search_no';
 
 
-    public function __construct($needleTermsByTaxonomy, $search = self::SEARCH_ANY, $allowOthers = true, ICondition $matchingItemsConstraint = null)
+    public function __construct($needleTermsByTaxonomy, $search = self::SEARCH_ANY, $allowOthers = true, ?ICondition $matchingItemsConstraint = null)
     {
         if (!in_array((string)$search, array(self::SEARCH_ANY, self::SEARCH_ALL, self::SEARCH_NO), true)) {
             throw new InvalidArgumentException("Unknown search mode '{$search}'");

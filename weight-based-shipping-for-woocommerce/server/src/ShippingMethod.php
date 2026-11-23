@@ -76,7 +76,7 @@ class ShippingMethod extends WC_Shipping_Method
     {
         $settings = Settings::instance();
 
-        $package = PackageConverter::fromWoocommerceToCore2(
+        $package = PackageConverter::fromWoocommerceToCore(
             $_package,
             WC()->cart,
             $settings->preferCustomPackagePrice,

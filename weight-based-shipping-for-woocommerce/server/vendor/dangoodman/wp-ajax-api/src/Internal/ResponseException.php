@@ -19,7 +19,7 @@ class ResponseException extends \RuntimeException
     public $response;
 
 
-    public function __construct(\WbsVendors\Dgm\WpAjaxApi\Response $response, \Throwable $previous = null)
+    public function __construct(\WbsVendors\Dgm\WpAjaxApi\Response $response, ?\Throwable $previous = null)
     {
         parent::__construct($response->body, $response->code, $previous);
         $this->response = $response;

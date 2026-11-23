@@ -1,9 +1,9 @@
 <?php
 namespace WbsngVendors\Dgm\Shengine\Operations;
 
-use InvalidArgumentException;
 use WbsngVendors\Dgm\Shengine\Interfaces\IPackage;
 use WbsngVendors\Dgm\Shengine\Processing\Registers;
+use InvalidArgumentException;
 
 
 class MultiplyOperation extends AbstractOperation

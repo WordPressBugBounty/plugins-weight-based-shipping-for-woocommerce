@@ -8,7 +8,7 @@ use Dgm\Shengine\Interfaces\IPackage;
 
 class AggregatedCalculator implements \WbsVendors\Dgm\Shengine\Interfaces\ICalculator
 {
-    public function __construct(\WbsVendors\Dgm\Shengine\Interfaces\ICalculator $calculator, \WbsVendors\Dgm\Shengine\Interfaces\IAggregator $aggregator = null)
+    public function __construct(\WbsVendors\Dgm\Shengine\Interfaces\ICalculator $calculator, ?\WbsVendors\Dgm\Shengine\Interfaces\IAggregator $aggregator = null)
     {
         $this->calculator = $calculator;
         $this->aggregator = $aggregator;

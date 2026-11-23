@@ -6,7 +6,7 @@ use WbsngVendors\Dgm\Shengine\Interfaces\IRate;
 
 class MinAggregator extends ReduceAggregator
 {
-    protected function reduce(IRate $carry = null, IRate $current)
+    protected function reduce(?IRate $carry, IRate $current)
     {
         if (!isset($carry) || $carry->getCost() > $current->getCost()) {
             $carry = $current;

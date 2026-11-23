@@ -10,10 +10,10 @@ class Item implements \WbsVendors\Dgm\Shengine\Interfaces\IItem
     public function __construct(
         $productId = null,
         $productVariationId = null,
-        \WbsVendors\Dgm\Shengine\Model\Price $price = null,
+        ?\WbsVendors\Dgm\Shengine\Model\Price $price = null,
         $weight = null,
-        \WbsVendors\Dgm\Shengine\Model\Dimensions $dimensions = null,
-        array $terms = null
+        ?\WbsVendors\Dgm\Shengine\Model\Dimensions $dimensions = null,
+        ?array $terms = null
     ) {
         /** @noinspection PhpDeprecationInspection
          * Public setters are deprecated. We'll make them private some day and remove the deprecated state.
@@ -131,7 +131,7 @@ class Item implements \WbsVendors\Dgm\Shengine\Interfaces\IItem
      * @param array|null $terms
      * @return $this
      */
-    public function setTerms($taxonomy, array $terms = null)
+    public function setTerms($taxonomy, ?array $terms = null)
     {
         if (is_array($taxonomy) && func_num_args() === 1) {
             /** @noinspection CallableParameterUseCaseInTypeContextInspection */
